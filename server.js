@@ -258,6 +258,8 @@ app.post("/api/user/balance/transfer", async (req, res) => {
   });
 });
 
+app.use(cors());
+
 // routes
 // require("./routes/auth.routes")(app);
 // require("./routes/user.routes")(app);
