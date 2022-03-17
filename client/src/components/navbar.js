@@ -9,7 +9,7 @@ export default function NavBar() {
 
   const getUser = async (email) => {
     try {
-      const response = await fetch("http://localhost:8080/api/user/email", {
+      const response = await fetch("http://localhost:5000/api/user/email", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

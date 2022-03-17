@@ -54,7 +54,7 @@ export default function Transfer() {
   const updateAccount = async (sender, amount, recipient) => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/user/balance/transfer",
+        "http://localhost:5000/api/user/balance/transfer",
         {
           method: "POST",
           headers: {

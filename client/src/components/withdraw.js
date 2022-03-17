@@ -52,7 +52,7 @@ export default function Deposit() {
   const updateAccount = async (email, amount) => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/user/balance/withdraw",
+        "http://localhost:5000/api/user/balance/withdraw",
         {
           method: "PUT",
           headers: {
