@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { number } = require("yup/lib/locale");
+//const { number } = require("yup/lib/locale");
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
