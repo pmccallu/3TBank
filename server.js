@@ -2,17 +2,15 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const db = require("./server/models");
-const dbConfig = require("./server/db.config");
-const { user } = require("./server/models");
+const db = require("./models");
 const User = db.user;
 const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.use(express.static(path.resolve(__dirname, "./client/build")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "./client", "build", "index.html"));
   });
 } else {
   app.get("/", (req, res) => {
