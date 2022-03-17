@@ -33,7 +33,7 @@ db.mongoose
   });
 
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://pjmbadbank.herokuapp.com",
 };
 
 app.use(cors(corsOptions));
