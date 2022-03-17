@@ -6,6 +6,9 @@ const db = require("./models");
 const User = db.user;
 const path = require("path");
 
+app.use(express.static("public"));
+app.use(cors());
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.resolve(__dirname, "./client/build")));
 
@@ -257,9 +260,6 @@ app.post("/api/user/balance/transfer", async (req, res) => {
     message: "Could not transfer",
   });
 });
-
-app.use(express.static("public"));
-app.use(cors());
 
 // routes
 // require("./routes/auth.routes")(app);
