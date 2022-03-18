@@ -6,8 +6,8 @@ const db = require("./models");
 const User = db.user;
 const path = require("path");
 
-app.use(express.static("public"));
-app.options("*", cors()); // include before other routes, CORs enabled preflight
+//app.use(express.static("public"));
+//app.options("*", cors()); // include before other routes, CORs enabled preflight
 //app.use(cors());
 
 if (process.env.NODE_ENV === "production") {
@@ -36,15 +36,15 @@ db.mongoose
     process.exit();
   });
 
-//var corsOptions = {
-//  origin: "http://localhost:3000",
-//};
+var corsOptions = {
+  origin: "http://localhost:3000",
+};
 
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 // parse requests of content-type - application/json
-//app.use(express.json());
+app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", cors(), (req, res) => {

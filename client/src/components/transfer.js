@@ -53,20 +53,17 @@ export default function Transfer() {
 
   const updateAccount = async (sender, amount, recipient) => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/user/balance/transfer",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sender,
-            amount,
-            recipient,
-          }),
-        }
-      );
+      const response = await fetch(`/api/user/balance/transfer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sender,
+          amount,
+          recipient,
+        }),
+      });
 
       if (response.status === 200) {
         const account = await response.json();

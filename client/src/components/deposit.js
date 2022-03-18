@@ -52,19 +52,16 @@ export default function Deposit() {
 
   const updateAccount = async (email, amount) => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/user/balance/deposit",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            amount,
-          }),
-        }
-      );
+      const response = await fetch(`/api/user/balance/deposit`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          amount,
+        }),
+      });
       const account = await response.json();
       if (account.data.balance) {
         console.log(account.data.balance);
