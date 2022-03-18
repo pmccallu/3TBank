@@ -9,7 +9,7 @@ export default function AllData() {
 
   React.useEffect(() => {
     //fetch all accounts from API
-    fetch("http://localhost:5000/api/users/all")
+    fetch(`/api/users/all`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
