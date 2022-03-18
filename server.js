@@ -7,7 +7,8 @@ const User = db.user;
 const path = require("path");
 
 app.use(express.static("public"));
-app.use(cors());
+app.options("*", cors()); // include before other routes, CORs enabled preflight
+//app.use(cors());
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.resolve(__dirname, "./client/build")));
