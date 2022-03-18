@@ -7,31 +7,13 @@ const User = db.user;
 const path = require("path");
 
 app.use(express.static("public"));
-//app.options("*", cors()); // include before other routes, CORs enabled preflight
+app.options("*", cors()); // include before other routes, CORs enabled preflight
 //app.use(cors());
-
-const allowlist = [
-  "http://localhost:5000/",
-  "https://pjmbadbank.herokuapp.com",
-];
-const corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (allowlist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false }; // disable CORS for this request
-  }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
-
-app.listen(80, function () {
-  console.log("CORS-enabled web server listening on port 80");
-});
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.resolve(__dirname, "./client/build")));
 
-  app.get("*", cors(corsOptionsDelegate), (req, res) => {
+  app.get("*", cors(), (req, res) => {
     res.sendFile(path.resolve(__dirname, "./client", "build", "index.html"));
   });
 } else {
@@ -65,7 +47,7 @@ db.mongoose
 //app.use(express.urlencoded({ extended: true }));
 
 // simple route
-app.get("/", cors(corsOptionsDelegate), (req, res) => {
+app.get("/", cors(), (req, res) => {
   const user = new User({
     name: "test",
     email: "test@test.com",
@@ -90,7 +72,7 @@ async function findUser(email) {
 }
 
 // make a post function for registration /api/registration
-app.post("/api/user/register", cors(corsOptionsDelegate), async (req, res) => {
+app.post("/api/user/register", cors(), async (req, res) => {
   const { name, email, password } = req.body;
 
   const foundUser = await findUser(email);
@@ -125,7 +107,7 @@ app.post("/api/user/register", cors(corsOptionsDelegate), async (req, res) => {
 // if user exists
 // return error
 
-app.post("/api/user/login", cors(corsOptionsDelegate), async (req, res) => {
+app.post("/api/user/login", cors(), async (req, res) => {
   const { email, password } = req.body;
 
   const user = await findUser(email);
@@ -148,7 +130,7 @@ app.post("/api/user/login", cors(corsOptionsDelegate), async (req, res) => {
   res.json({ message: "Successfully logged in.", user: payload });
 });
 
-app.get("/api/user/balance", cors(corsOptionsDelegate), async (req, res) => {
+app.get("/api/user/balance", cors(), async (req, res) => {
   const { email } = req.query;
   if (email) {
     const foundUser = await findUser(email);
@@ -166,131 +148,119 @@ app.get("/api/user/balance", cors(corsOptionsDelegate), async (req, res) => {
   });
 });
 
-app.put(
-  "/api/user/balance/deposit",
-  cors(corsOptionsDelegate),
-  async (req, res) => {
-    const { email, amount } = req.body;
-    if (email) {
-      const foundUser = await findUser(email);
+app.put("/api/user/balance/deposit", cors(), async (req, res) => {
+  const { email, amount } = req.body;
+  if (email) {
+    const foundUser = await findUser(email);
 
-      if (foundUser) {
-        foundUser.balance = Number(foundUser.balance) + Number(amount);
-        const updatedUser = await User.updateOne(
-          { email },
-          { balance: foundUser.balance }
-        );
+    if (foundUser) {
+      foundUser.balance = Number(foundUser.balance) + Number(amount);
+      const updatedUser = await User.updateOne(
+        { email },
+        { balance: foundUser.balance }
+      );
 
-        if (updatedUser) {
-          const payload = {
-            data: {
-              balance: foundUser.balance,
-            },
-          };
-          res.status(200).send(payload);
-        }
+      if (updatedUser) {
+        const payload = {
+          data: {
+            balance: foundUser.balance,
+          },
+        };
+        res.status(200).send(payload);
       }
     }
-    res.status(404).send({
-      message: "Could not deposit",
-    });
   }
-);
+  res.status(404).send({
+    message: "Could not deposit",
+  });
+});
 
-app.put(
-  "/api/user/balance/withdraw",
-  cors(corsOptionsDelegate),
-  async (req, res) => {
-    const { email, amount } = req.body;
-    if (email) {
-      const foundUser = await findUser(email);
+app.put("/api/user/balance/withdraw", cors(), async (req, res) => {
+  const { email, amount } = req.body;
+  if (email) {
+    const foundUser = await findUser(email);
 
-      if (foundUser) {
-        foundUser.balance = Number(foundUser.balance) - Number(amount);
-        const updatedUser = await User.updateOne(
-          { email },
-          { balance: foundUser.balance }
-        );
+    if (foundUser) {
+      foundUser.balance = Number(foundUser.balance) - Number(amount);
+      const updatedUser = await User.updateOne(
+        { email },
+        { balance: foundUser.balance }
+      );
 
-        if (updatedUser) {
-          const payload = {
-            data: {
-              balance: foundUser.balance,
-            },
-          };
-          res.status(200).send(payload);
-        }
+      if (updatedUser) {
+        const payload = {
+          data: {
+            balance: foundUser.balance,
+          },
+        };
+        res.status(200).send(payload);
       }
     }
-    res.status(404).send({
-      message: "Could not withdraw",
-    });
   }
-);
+  res.status(404).send({
+    message: "Could not withdraw",
+  });
+});
 
-app.post(
-  "/api/user/balance/transfer",
-  cors(corsOptionsDelegate),
-  async (req, res) => {
-    const { sender, amount, recipient } = req.body;
+app.post("/api/user/balance/transfer", cors(), async (req, res) => {
+  const { sender, amount, recipient } = req.body;
 
-    console.log(sender, amount, recipient);
+  console.log(sender, amount, recipient);
 
-    if (Number(amount) <= 0) {
-      res.status(400).send({ message: "Transfer must be greater than 0" });
-    }
-
-    if (!sender) {
-      res.status(400).send({ message: "invalid sender email" });
-    }
-    if (!recipient) {
-      res.status(400).send({ message: "invalid recipient email" });
-    }
-    if (!amount) {
-      res.status(400).send({ message: "invalid amount" });
-    }
-
-    const foundSender = await findUser(sender);
-    const foundRecipient = await findUser(recipient);
-
-    if (!foundSender) {
-      res.status(404).send({ message: "sender does not exist" });
-    }
-    if (!foundRecipient) {
-      res.status(404).send({ message: "recipient does not exist" });
-    }
-    if (foundSender.balance < Number(amount)) {
-      res.status(400).send({ message: "Transfer exceeds balance" });
-    }
-
-    foundSender.balance = Number(foundSender.balance) - Number(amount);
-    foundRecipient.balance = Number(foundRecipient.balance) + Number(amount);
-
-    const updatedSender = await User.findOneAndUpdate(
-      { email: sender },
-      { balance: foundSender.balance },
-      { returnDocument: "after" }
-    );
-
-    const updatedRecipient = await User.findOneAndUpdate(
-      { email: recipient },
-      { balance: foundRecipient.balance },
-      { returnDocument: "after" }
-    );
-
-    if (updatedSender && updatedRecipient) {
-      const payload = {
-        data: {
-          balance: updatedSender.balance,
-        },
-      };
-      res.status(200).send(payload);
-    }
-    res.status(404).send({
-      message: "Could not transfer",
-    });
+  if (Number(amount) <= 0) {
+    res.status(400).send({ message: "Transfer must be greater than 0" });
   }
-);
+
+  if (!sender) {
+    res.status(400).send({ message: "invalid sender email" });
+  }
+  if (!recipient) {
+    res.status(400).send({ message: "invalid recipient email" });
+  }
+  if (!amount) {
+    res.status(400).send({ message: "invalid amount" });
+  }
+
+  const foundSender = await findUser(sender);
+  const foundRecipient = await findUser(recipient);
+
+  if (!foundSender) {
+    res.status(404).send({ message: "sender does not exist" });
+  }
+  if (!foundRecipient) {
+    res.status(404).send({ message: "recipient does not exist" });
+  }
+  if (foundSender.balance < Number(amount)) {
+    res.status(400).send({ message: "Transfer exceeds balance" });
+  }
+
+  foundSender.balance = Number(foundSender.balance) - Number(amount);
+  foundRecipient.balance = Number(foundRecipient.balance) + Number(amount);
+
+  const updatedSender = await User.findOneAndUpdate(
+    { email: sender },
+    { balance: foundSender.balance },
+    { returnDocument: "after" }
+  );
+
+  const updatedRecipient = await User.findOneAndUpdate(
+    { email: recipient },
+    { balance: foundRecipient.balance },
+    { returnDocument: "after" }
+  );
+
+  if (updatedSender && updatedRecipient) {
+    const payload = {
+      data: {
+        balance: updatedSender.balance,
+      },
+    };
+    res.status(200).send(payload);
+  }
+  res.status(404).send({
+    message: "Could not transfer",
+  });
+});
 
 // routes
 // require("./routes/auth.routes")(app);
