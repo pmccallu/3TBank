@@ -13,7 +13,7 @@ const path = require("path");
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.resolve(__dirname, "./client/build")));
 
-  app.get("*", cors(), (req, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "./client", "build", "index.html"));
   });
 } else {
@@ -47,7 +47,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // simple route
-app.get("/", cors(), (req, res) => {
+app.get("/", (req, res) => {
   const user = new User({
     name: "test",
     email: "test@test.com",
@@ -72,7 +72,7 @@ async function findUser(email) {
 }
 
 // make a post function for registration /api/registration
-app.post("/api/user/register", cors(), async (req, res) => {
+app.post(`/api/user/register`, async (req, res) => {
   const { name, email, password } = req.body;
 
   const foundUser = await findUser(email);
@@ -107,7 +107,7 @@ app.post("/api/user/register", cors(), async (req, res) => {
 // if user exists
 // return error
 
-app.post("/api/user/login", cors(), async (req, res) => {
+app.post(`/api/user/login`, async (req, res) => {
   const { email, password } = req.body;
 
   const user = await findUser(email);
@@ -130,7 +130,7 @@ app.post("/api/user/login", cors(), async (req, res) => {
   res.json({ message: "Successfully logged in.", user: payload });
 });
 
-app.get("/api/user/balance", cors(), async (req, res) => {
+app.get(`/api/user/balance`, async (req, res) => {
   const { email } = req.query;
   if (email) {
     const foundUser = await findUser(email);
@@ -148,7 +148,7 @@ app.get("/api/user/balance", cors(), async (req, res) => {
   });
 });
 
-app.put("/api/user/balance/deposit", cors(), async (req, res) => {
+app.put(`/api/user/balance/deposit`, async (req, res) => {
   const { email, amount } = req.body;
   if (email) {
     const foundUser = await findUser(email);
@@ -175,7 +175,7 @@ app.put("/api/user/balance/deposit", cors(), async (req, res) => {
   });
 });
 
-app.put("/api/user/balance/withdraw", cors(), async (req, res) => {
+app.put(`/api/user/balance/withdraw`, async (req, res) => {
   const { email, amount } = req.body;
   if (email) {
     const foundUser = await findUser(email);
@@ -202,7 +202,7 @@ app.put("/api/user/balance/withdraw", cors(), async (req, res) => {
   });
 });
 
-app.post("/api/user/balance/transfer", cors(), async (req, res) => {
+app.post(`/api/user/balance/transfer`, async (req, res) => {
   const { sender, amount, recipient } = req.body;
 
   console.log(sender, amount, recipient);
