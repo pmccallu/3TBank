@@ -25,7 +25,6 @@ export default function Login() {
   const handleLogin = async ({ email, password }) => {
     try {
       const response = await fetch(`/api/login`, {
-        mode: "cors",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -33,7 +33,7 @@ export default function CreateAccount() {
 
   const registerUser = async (name, email, password) => {
     console.log(name, email, password);
-    const url = `http://localhost:5000/api/user/register`;
+    const url = `/api/user/register`;
     const res = await fetch(url, {
       method: "POST",
       headers: {
