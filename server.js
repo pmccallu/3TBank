@@ -148,7 +148,7 @@ app.get("/api/user/balance", cors(), async (req, res) => {
   });
 });
 
-app.put("/api/user/balance/deposit", cors(), async (req, res) => {
+app.get("/api/user/balance/deposit", cors(), async (req, res) => {
   const { email, amount } = req.body;
   if (email) {
     const foundUser = await findUser(email);
@@ -175,7 +175,7 @@ app.put("/api/user/balance/deposit", cors(), async (req, res) => {
   });
 });
 
-app.put("/api/user/balance/withdraw", cors(), async (req, res) => {
+app.get("/api/user/balance/withdraw", cors(), async (req, res) => {
   const { email, amount } = req.body;
   if (email) {
     const foundUser = await findUser(email);
