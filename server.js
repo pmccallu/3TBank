@@ -141,11 +141,12 @@ app.get(`/api/user/balance`, async (req, res) => {
           balance: foundUser.balance,
         },
       });
+    } else {
+      res.status(404).send({
+        message: "Could not find balance for user",
+      });
     }
   }
-  res.status(404).send({
-    message: "Could not find balance for user",
-  });
 });
 
 app.put(`/api/user/balance/deposit`, async (req, res) => {
@@ -168,11 +169,12 @@ app.put(`/api/user/balance/deposit`, async (req, res) => {
         };
         res.status(200).send(payload);
       }
+    } else {
+      res.status(404).send({
+        message: "Could not deposit",
+      });
     }
   }
-  res.status(404).send({
-    message: "Could not deposit",
-  });
 });
 
 app.put(`/api/user/balance/withdraw`, async (req, res) => {
@@ -195,11 +197,12 @@ app.put(`/api/user/balance/withdraw`, async (req, res) => {
         };
         res.status(200).send(payload);
       }
+    } else {
+      res.status(404).send({
+        message: "Could not withdraw",
+      });
     }
   }
-  res.status(404).send({
-    message: "Could not withdraw",
-  });
 });
 
 app.post(`/api/user/balance/transfer`, async (req, res) => {
