@@ -91,7 +91,9 @@ export default function NavBar() {
                 </Button>
 
                 <li className="nav-item navbar-toggler-right">
-                  <h5>${user.email}</h5>
+                  <Link to="/home" className="nav-link">
+                    {user.email}
+                  </Link>
                 </li>
               </ul>
             ) : (
