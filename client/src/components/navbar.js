@@ -54,7 +54,20 @@ export default function NavBar() {
               </Link>
             </li>
             {user ? (
-              ""
+              <li className="nav-item">
+                <Link className="nav-link" to="/deposit">
+                  Deposit
+                </Link>
+                <Link className="nav-link" to="/withdraw">
+                  Withdraw
+                </Link>
+                <Link className="nav-link" to="/balance">
+                  Balance
+                </Link>
+                <Link className="nav-link" to="/transfer">
+                  Transfer
+                </Link>
+              </li>
             ) : (
               <li className="nav-item">
                 <Link to="/createaccount" className="nav-link">
@@ -62,33 +75,8 @@ export default function NavBar() {
                 </Link>
               </li>
             )}
-            <li className="nav-item">
-              <Link className="nav-link" to="/deposit">
-                Deposit
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/withdraw">
-                Withdraw
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/balance">
-                Balance
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/transfer">
-                Transfer
-              </Link>
-            </li>
 
             {user ? (
-              //              <h4>
-              //              <Badge style={{margin: 10}}>{}
-              // PULL Bootstrap current user
-              //                </Badge>
-              //              </h4>
               <Button className="btn btn-light" onClick={() => setUser(null)}>
                 Log Out
               </Button>
