@@ -85,9 +85,15 @@ export default function NavBar() {
             )}
 
             {user ? (
-              <Button className="btn btn-light" onClick={() => setUser(null)}>
-                Log Out
-              </Button>
+              <ul className="navbar-nav">
+                <Button className="btn btn-light" onClick={() => setUser(null)}>
+                  Log Out
+                </Button>
+
+                <li className="nav-item navbar-toggler-right">
+                  <h5>${user.email}</h5>
+                </li>
+              </ul>
             ) : (
               <li className="nav-item navbar-toggler-right">
                 <Link to="/login" className="nav-link">
