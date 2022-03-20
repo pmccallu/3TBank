@@ -87,7 +87,6 @@ export default function NavBar() {
             {user ? (
               <ul className="navbar-nav">
                 <Button className="btn btn-light" onClick={() => setUser(null)}>
-                  <Link to="/home" className="nav-link"></Link>
                   Log Out
                 </Button>
 
